@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/16 15:28:39 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/03/20 12:09:57 by ael-khel         ###   ########.fr       */
+/*   Created: 2023/03/20 07:05:01 by ael-khel          #+#    #+#             */
+/*   Updated: 2023/03/20 11:43:03 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include <unistd.h>
+#include <stdio.h>
 
-int	main(int ac, char **av, char **env)
+int	main(void)
 {
-	int		in_fd;
-	int		errsv;
-	int		out_fd;
-	char	*error;
+	int	a, b;
 
-	if (ac != 5)
-		return (0);
-	in_fd = open(av[1], O_RDONLY);
-	if (in_fd < 0)
+	a = fork();
+	b = getpid();
+	printf("fork %d pid %d\n", a, b);
+
+	if (a == 0)
 	{
-		errsv = errno;
-		ft_printf(STDERR_FILENO, "bash: %s: %s\n", av[1], strerror(errno));
+		// a = fork();
+		b = getppid();
+		printf("hadci f 9lb fork %d pid %d\n", a, b);
 	}
-	char* argv[] = {"ls", "-la", NULL };
-  	char* envp[] = { "/bin/", NULL};
-  	if (execve("/bin/ls", argv, NULL) == -1)
-		perror("Could not execve");
+	if (a != 0)
+	{
+		sleep(50);
+	}
 	return (0);
 }
