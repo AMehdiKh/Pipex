@@ -8,12 +8,12 @@ SRCS = main.c
 
 OBJS = ${SRCS:.c=.o}
 
-LIBFT = ./LibFT/libft.a
+LIBFT = /Users/ael-khel/Desktop/Pipex/LibFT/libft.a
 
 .PHONY: clean
 all: $(NAME)
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+	$(CC) $(LIBFT) $(OBJS) -o $@
 
 $(LIBFT):
 	$(MAKE) -C ./LibFT
