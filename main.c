@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:28:39 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/03/28 07:18:00 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/03/29 20:04:45 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex[1];
-	int		pip[2];
-	int		pop[2];
 
 	ft_bzero(pipex, sizeof(pipex));
-	if (pipe(pip) != 0 || pipe(pop) != 0)
+	int *pipefd = malloc((ac - 4) * sizeof(int));
+	int x = 0;
+	while (x < ac - 4)
 	{
-		ft_printf(STDERR_FILENO, "pipex: %s: %s\n", "pipe()", strerror(errno));
-		exit(EXIT_FAILURE);
+		if (pipe(pipefd + (x * 2)) != 0)
+		{
+			ft_printf(STDERR_FILENO, "pipex: %s: %s\n", "pipe()", strerror(errno));
+			exit(EXIT_FAILURE);
+		}
+		++x;
 	}
 	pipex->av = av;
 	pipex->env = env;
@@ -37,21 +41,31 @@ int	main(int ac, char **av, char **env)
 		ft_printf(STDERR_FILENO, "pipex: %s: %s\n", av[1], strerror(errno));
 	}
 	ft_path(pipex, env);
-	dup2(pipex->file1, 0);
-	close(pipex->file1);
 	int i = 2;
+	int in = 0;
+	int	out = 3;
 	while (av[i + 1])
 	{
 		int	pid = fork();
 		if (pid == 0)
 		{
-			if (i == 3)
+			if (i == 2)
 			{
-					dup2(pip[1], 1);
-					close(pip[1]);
-					close(pip[0]);
-				dup2(pipex->pipe_in, pipex->file1);
-				dup2(pipex->file2, pipex->pipe_out);
+				ft_dup2(pipex->file1, 0);
+				ft_dup2(pipefd[1], 1);
+				close(pipefd[0]);
+			}
+			else
+			{
+				ft_dup2(pipefd[in], 0);
+				close(pipefd[in + 1]);
+				if (!av[i + 2])
+					ft_dup2(pipex->file2, 1);
+				else
+				{
+					dup2(pipefd[out], 1);
+					close(pipefd[out - 1]);
+				}
 			}
 			if (ft_check_cmd(av[i], pipex))
 			{
@@ -62,9 +76,20 @@ int	main(int ac, char **av, char **env)
 				ft_printf(2, "%s\n", pipex->cmd[0]);
 				execve(pipex->cmd[0], pipex->cmd, pipex->env);
 			}
-			exit(EXIT_SUCCESS);
+		}
+		close(pipefd[out]);
+		if (!av[i + 1])
+		{
+			x = 0;
+			while (x < (ac - 4) * 2)
+			{
+				close(pipefd[x]);
+				++x;
+			}
 		}
 		wait(NULL);
+		out += 2;
+		in += 2;
 		++i;
 	}
 	return (0);
@@ -126,7 +151,7 @@ int	ft_dup2(int new, int old)
 	if (fd < 0)
 	{
 		ft_printf(STDERR_FILENO, "pipex: dup2(): %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
 	close(new);
 	return (fd);
