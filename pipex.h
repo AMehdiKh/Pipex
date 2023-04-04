@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/03/23 10:13:26 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/04 04:01:20 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <errno.h>
 # include "/Users/ael-khel/Desktop/Pipex/LibFT/libft.h"
 
+# define STDERR 2
+
 typedef struct s_pipex
 {
 	char	**path;
@@ -29,8 +31,9 @@ typedef struct s_pipex
 	char	**env;
 	char	*cmd_name;
 	char	*valid_path;
-	int		pipe_in;
-	int		pipe_out;
+	char	*full_cmd;
+	pid_t	pid;
+	int		pipe_fd;
 	int		file1;
 	int		file2;
 }		t_pipex;
