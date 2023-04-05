@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/04 04:01:20 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/05 01:13:24 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ typedef struct s_pipex
 {
 	char	**path;
 	char	**cmd;
-	char	**av;
-	char	**env;
 	char	*cmd_name;
 	char	*valid_path;
 	char	*full_cmd;
-	pid_t	pid;
-	int		pipe_fd;
+	char	**av;
+	char	**env;
+	int		ac;
+	int		i;
+	int		pipefd[2];
+	int		prev_in;
 	int		file1;
 	int		file2;
 }		t_pipex;
