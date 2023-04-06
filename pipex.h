@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/05 01:13:24 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/06 21:37:06 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+# include <sys/wait.h>
 # include "/Users/ael-khel/Desktop/Pipex/LibFT/libft.h"
 
 # define STDERR 2

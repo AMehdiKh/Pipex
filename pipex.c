@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/05 18:46:47 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/06 21:31:18 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int ac, char **av, char **env)
 	pipex->prev_in = -1;
 	pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	pipex->file1 = ft_open(av[1], O_RDONLY, 0);
-	ft_parse_path(pipex);
 	ft_clean_parent(pipex);
 	return (0);
 }
@@ -50,7 +49,7 @@ void	pipex(t_pipex *pipex)
 			if (i == pipex->ac - 2)
 				ft_dup2(pipex->file2, 1, pipex);
 			ft_check_cmd(pipex->av[i], pipex);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 		ft_dup(pipefd[0], pipex);
 		close(pipefd[0]);
@@ -64,7 +63,7 @@ void	ft_parse_path(t_pipex *pipex, char **env)
 	int	i;
 
 	i = 0;
-	while (pipex->env[i] && pipex->env[i])
+	while (pipex->env && pipex->env[i])
 	{
 		if (!ft_strncmp("PATH=", pipex->env[i], 5))
 		{
@@ -80,6 +79,25 @@ void	ft_parse_path(t_pipex *pipex, char **env)
 			break ;
 		}
 		++i;
+	}
+	ft_slash_end(pipex);
+}
+
+void	ft_slash_end(t_pipex *pipex)
+{
+	char	*path;
+	int		i;
+
+	if (pipex->path)
+	{
+		i = 0;
+		while (pipex->path[i])
+		{
+			path = ft_strjoin(pipex->path[i], "/");
+			free(pipex->path[i]);
+			pipex->path[i] = path;
+			++i;
+		}
 	}
 }
 
@@ -105,7 +123,6 @@ void	ft_cmd_name(char *cmd, t_pipex *pipex)
 	if (!pipex->cmd_name)
 	{
 		ft_printf(STDERR_FILENO, "pipex: malloc(): %s\n", strerror(errno));
-		ft_clear(pipex->path);
 		exit(EXIT_FAILURE);
 	}
 	ft_strlcpy(pipex->cmd_name, cmd, (i + 1));
@@ -113,8 +130,7 @@ void	ft_cmd_name(char *cmd, t_pipex *pipex)
 
 int	ft_check_cmd(char *cmd, t_pipex *pipex)
 {
-	char	*full_cmd;
-	char	*path;
+	char	*path_cmd_name;
 	int		i;
 
 	ft_cmd_name(cmd, pipex);
@@ -128,19 +144,16 @@ int	ft_check_cmd(char *cmd, t_pipex *pipex)
 	ft_parse_path(pipex);
 	while (pipex->path && pipex->path[i])
 	{
-		path = ft_strjoin(pipex->path[i], "/");
-		full_cmd = ft_strjoin(path, pipex->cmd_name);
-		if (!access(full_cmd, F_OK))
+		path_cmd_name = ft_strjoin(pipex->path[i], pipex->cmd_name);
+		if (!access(path_cmd_name, F_OK))
 		{
 			free(pipex->cmd_name);
-			free(full_cmd);
+			free(path_cmd_name);
 			ft_clear(pipex->path);
-			ft_cmds_parse(ft_strjoin(path, cmd), pipex);
-			free(path);
+			ft_cmds_parse(ft_strjoin(pipex->path[i], cmd), pipex);
 			ft_execve(pipex);
 		}
-		free(full_cmd);
-		free(path);
+		free(path_cmd_name);
 		++i;
 	}
 	if (pipex->path)
