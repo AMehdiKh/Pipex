@@ -67,9 +67,35 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	wc = word_count(s, c);
+	if (ft_strchr(cmd, 39) || ft_strchr(cmd, 34))
+	{
+		wc = word_count(s);
+	}
+	else
+		wc = word_count(s, c);
 	ptr = ft_calloc(wc + 1, sizeof(char *));
 	if (!ptr)
 		return (NULL);
 	return (ft_alloc(ptr, s, c, wc));
+}
+
+size_t	word_count(char const *s, char c)
+{
+	size_t	wc;
+
+	wc = 0;
+	if (*s)
+	{
+		while (*s == ' ' && *s)
+			++s;
+		if (*s)
+			++wc;
+		while (*s != ' ' && *s)
+			++s;
+	}
+	while (*s)
+	{
+		if (*s == 34)
+	}
+	return (wc);
 }
