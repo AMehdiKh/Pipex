@@ -20,22 +20,22 @@ void	*ft_clear_split(char **ptr, size_t x)
 	return (NULL);
 }
 
-size_t	word_count(char const *s, char c)
-{
-	size_t	wc;
+// size_t	word_count(char const *s, char c)
+// {
+// 	size_t	wc;
 
-	wc = 0;
-	while (*s)
-	{
-		while (*s == c && *s)
-			++s;
-		if (*s)
-			++wc;
-		while (*s != c && *s)
-			++s;
-	}
-	return (wc);
-}
+// 	wc = 0;
+// 	while (*s)
+// 	{
+// 		while (*s == c && *s)
+// 			++s;
+// 		if (*s)
+// 			++wc;
+// 		while (*s != c && *s)
+// 			++s;
+// 	}
+// 	return (wc);
+// }
 
 char	**ft_alloc(char **ptr, const char *s, char c, size_t wc)
 {
@@ -67,12 +67,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	if (ft_strchr(cmd, 39) || ft_strchr(cmd, 34))
-	{
-		wc = word_count(s);
-	}
-	else
-		wc = word_count(s, c);
+	wc = word_count(s, c);
 	ptr = ft_calloc(wc + 1, sizeof(char *));
 	if (!ptr)
 		return (NULL);
@@ -81,21 +76,29 @@ char	**ft_split(char const *s, char c)
 
 size_t	word_count(char const *s, char c)
 {
+	int		quote;
 	size_t	wc;
 
+	quote = 0;
 	wc = 0;
 	if (*s)
 	{
-		while (*s == ' ' && *s)
+		while (*s == c && *s)
 			++s;
 		if (*s)
+		{
+			if (*s == 39 || *s == 34)
+				quote = *s;
+			else
+				quote = 0;
 			++wc;
-		while (*s != ' ' && *s)
+		}
+		while (*s)
+		{
+			if ((*s == quote && *(s + 1) == ' ') || (!quote && *s == c))
+				break ;
 			++s;
-	}
-	while (*s)
-	{
-		if (*s == 34)
+		}
 	}
 	return (wc);
 }

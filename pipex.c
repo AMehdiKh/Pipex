@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/11 18:40:26 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:47:22 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,12 @@ void	ft_slash_end(t_pipex *pipex)
 
 void	ft_cmds_parse(char *cmd, t_pipex *pipex)
 {
-	int	i;
-	if (ft_strchr(cmd, 39) || ft_strchr(cmd, 34))
+	int	quotes;
+
+	i = 0;
+	while (cmd[quotes] == 39 || cmd[quotes] == 34)
+		++i;
+	if (quotes % 2 == 0)
 	{
 		pipex->cmd = ft_split(cmd, ' ');
 		free(cmd);
