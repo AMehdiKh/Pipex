@@ -132,5 +132,6 @@ int	ft_end_quoted(const char **s, int *quote)
 			++i;
 		}
 	}
+	
 	return (0);
 }
