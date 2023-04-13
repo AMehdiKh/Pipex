@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 16:39:04 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/11 21:12:31 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/13 03:05:25 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void		ft_bzero(void *s, size_t n);
 
 int			ft_nbrlen(int n);
 char		*ft_itoa(int n);
+
+size_t		word_count(char const *s, char c);
 
 char		**ft_split(char const *s, char c);
 size_t		word_count(char const *s, char c);

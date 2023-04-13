@@ -41,6 +41,7 @@ char	**ft_alloc(char **ptr, const char *s, char c, size_t wc)
 {
 	size_t	wl;
 	size_t	x;
+	int		quote;
 
 	x = 0;
 	while (*s && x < wc)
@@ -48,8 +49,16 @@ char	**ft_alloc(char **ptr, const char *s, char c, size_t wc)
 		wl = 0;
 		while (*s == c && *s)
 			++s;
-		while (s[wl] != c && s[wl])
+		if (*s == 39 || *s == 34)
+			quote = *s++;
+		else
+			quote = 0;
+		while (s[wl])
+		{
+			if ((s[wl] == quote && (s[wl + 1] == ' ' || s[wl + 1] == '\0')) || (!quote && s[wl] == c))
+				break ;
 			++wl;
+		}
 		ptr[x] = malloc(wl + 1);
 		if (!ptr[x])
 			return (ft_clear_split(ptr, x));
@@ -77,27 +86,51 @@ char	**ft_split(char const *s, char c)
 size_t	word_count(char const *s, char c)
 {
 	int		quote;
+	int		v_quotes;
+	int		i;
 	size_t	wc;
 
 	quote = 0;
 	wc = 0;
-	if (*s)
+	while (*s)
 	{
 		while (*s == c && *s)
 			++s;
 		if (*s)
 		{
 			if (*s == 39 || *s == 34)
-				quote = *s;
+			{
+				quote = *s++;
+				i = 0;
+				while (s[i])
+				{
+					if (s[i] == quote && (s[i + 1] == ' ' || s[i + 1] == '\0'))
+					{
+						v_quotes = 1;
+						break ;
+					}
+					if (s[i - 1] != quote && s[i] == ' ' && s[i + 1] == quote)
+					{
+						v_quotes = 0;
+						break ;
+					}
+					++i;
+				}
+			}
 			else
-				quote = 0;
+				v_quotes = 0;
 			++wc;
 		}
 		while (*s)
 		{
-			if ((*s == quote && *(s + 1) == ' ') || (!quote && *s == c))
+			if ((*s == quote && (*(s + 1) == ' ' || *(s + 1) == '\0') && v_quotes) || (!v_quotes && *s == c))
+			{
+				if (v_quotes)
+					++s;
 				break ;
-			++s;
+			}
+			if (*s)
+				++s;
 		}
 	}
 	return (wc);
