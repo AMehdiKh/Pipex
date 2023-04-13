@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 16:39:04 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/13 03:05:25 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/13 07:00:55 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
+# include <stdio.h>
 
 typedef struct s_printf
 {
@@ -38,7 +39,8 @@ void		ft_bzero(void *s, size_t n);
 int			ft_nbrlen(int n);
 char		*ft_itoa(int n);
 
-size_t		word_count(char const *s, char c);
+size_t		word_count(const char *s, char c);
+int			ft_end_quoted(const char **s, int *quote);
 
 char		**ft_split(char const *s, char c);
 size_t		word_count(char const *s, char c);

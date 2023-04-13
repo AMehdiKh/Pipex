@@ -83,55 +83,54 @@ char	**ft_split(char const *s, char c)
 	return (ft_alloc(ptr, s, c, wc));
 }
 
-size_t	word_count(char const *s, char c)
+size_t	word_count(const char *s, char c)
 {
 	int		quote;
 	int		v_quotes;
-	int		i;
 	size_t	wc;
 
-	quote = 0;
 	wc = 0;
 	while (*s)
 	{
 		while (*s == c && *s)
 			++s;
 		if (*s)
-		{
-			if (*s == 39 || *s == 34)
-			{
-				quote = *s++;
-				i = 0;
-				while (s[i])
-				{
-					if (s[i] == quote && (s[i + 1] == ' ' || s[i + 1] == '\0'))
-					{
-						v_quotes = 1;
-						break ;
-					}
-					if (s[i - 1] != quote && s[i] == ' ' && s[i + 1] == quote)
-					{
-						v_quotes = 0;
-						break ;
-					}
-					++i;
-				}
-			}
-			else
-				v_quotes = 0;
 			++wc;
-		}
+		v_quotes = ft_end_quoted(&s, &quote);
 		while (*s)
 		{
-			if ((*s == quote && (*(s + 1) == ' ' || *(s + 1) == '\0') && v_quotes) || (!v_quotes && *s == c))
+			if ((v_quotes && *s == quote && (*(s + 1) == ' '
+						|| *(s + 1) == '\0')) || (!v_quotes && *s == c))
 			{
-				if (v_quotes)
-					++s;
+				s += v_quotes;
 				break ;
 			}
-			if (*s)
-				++s;
+			++s;
 		}
 	}
 	return (wc);
+}
+
+int	ft_end_quoted(const char **s, int *quote)
+{
+	int	i;
+
+	i = 0;
+	if (**s == 39 || **s == 34)
+	{
+		*quote = **s;
+		*s += 1;
+		while (*(*s + i))
+		{
+			if (*(*s + i) == *quote && (*(*s + (i + 1)) == ' '
+					|| *(*s + (i + 1)) == '\0'))
+				return (1);
+			else if (*(*s + i) == ' ' && *(*s + (i - 1)) != *quote
+				&& *(*s + (i + 1)) == *quote
+				&& (*(*s + (i + 2)) != '\0' && *(*s + (i + 2)) != ' '))
+				return (0);
+			++i;
+		}
+	}
+	return (0);
 }

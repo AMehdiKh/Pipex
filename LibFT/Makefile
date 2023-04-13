@@ -2,7 +2,7 @@ NAME = libft.a
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra
 
 SRCS = \
 	ft_printf.c print_spec.c ft_split.c ft_itoa.c ft_calloc.c ft_bzero.c ft_strchr.c \
