@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/14 03:24:23 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/14 17:49:43 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_dup2(int old, int new, t_pipex *pipex)
 	if (dup2(old, new) < 0)
 	{
 		code = errno;
+		ft_clean_parent(pipex);
 		ft_printf(STDERR_FILENO, "pipex: dup2(): %s\n", strerror(code));
 		exit(EXIT_FAILURE);
 	}
