@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/06 21:37:06 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/14 03:11:06 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,5 @@ void	ft_cmds_parse(char *cmd, t_pipex *pipex);
 void	ft_cmd_name(char *cmd, t_pipex *pipex);
 int		ft_dup2(int new, int old);
 int		ft_check_cmd(char *cmd, t_pipex *pipex);
-
 
 #endif

@@ -36,39 +36,6 @@ void	*ft_clear_split(char **ptr, size_t x)
 // 	}
 // 	return (wc);
 // }
-
-char	**ft_alloc(char **ptr, const char *s, char c, size_t wc)
-{
-	size_t	wl;
-	size_t	x;
-	int		quote;
-
-	x = 0;
-	while (*s && x < wc)
-	{
-		wl = 0;
-		while (*s == c && *s)
-			++s;
-		if (*s == 39 || *s == 34)
-			quote = *s++;
-		else
-			quote = 0;
-		while (s[wl])
-		{
-			if ((s[wl] == quote && (s[wl + 1] == ' ' || s[wl + 1] == '\0')) || (!quote && s[wl] == c))
-				break ;
-			++wl;
-		}
-		ptr[x] = malloc(wl + 1);
-		if (!ptr[x])
-			return (ft_clear_split(ptr, x));
-		ft_strlcpy(ptr[x], s, wl + 1);
-		s += wl;
-		++x;
-	}
-	return (ptr);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	size_t	wc;
@@ -83,10 +50,43 @@ char	**ft_split(char const *s, char c)
 	return (ft_alloc(ptr, s, c, wc));
 }
 
+char	**ft_alloc(char **ptr, const char *s, char c, size_t wc)
+{
+	size_t	wl;
+	size_t	x;
+	int		e_quote;
+	int		quote;
+
+	x = 0;
+	while (*s && x < wc)
+	{
+		wl = 0;
+		while (*s == c && *s)
+			++s;
+		e_quote = ft_end_quoted(&s, &quote);
+		s -= (quote && !e_quote);
+		wl += (quote && !e_quote);
+		while (s[wl])
+		{
+			if ((e_quote && s[wl] == quote && (s[wl + 1] == ' '
+						|| s[wl + 1] == '\0')) || (!e_quote && s[wl] == c))
+				break ;
+			++wl;
+		}
+		ptr[x] = malloc(wl + 1);
+		if (!ptr[x])
+			return (ft_clear_split(ptr, x));
+		ft_strlcpy(ptr[x], s, wl + 1);
+		s += (wl + e_quote);
+		++x;
+	}
+	return (ptr);
+}
+
 size_t	word_count(const char *s, char c)
 {
+	int		e_quote;
 	int		quote;
-	int		v_quotes;
 	size_t	wc;
 
 	wc = 0;
@@ -96,13 +96,13 @@ size_t	word_count(const char *s, char c)
 			++s;
 		if (*s)
 			++wc;
-		v_quotes = ft_end_quoted(&s, &quote);
+		e_quote = ft_end_quoted(&s, &quote);
 		while (*s)
 		{
-			if ((v_quotes && *s == quote && (*(s + 1) == ' '
-						|| *(s + 1) == '\0')) || (!v_quotes && *s == c))
+			if ((e_quote && *s == quote && (*(s + 1) == ' '
+						|| *(s + 1) == '\0')) || (!e_quote && *s == c))
 			{
-				s += v_quotes;
+				s += e_quote;
 				break ;
 			}
 			++s;
@@ -132,6 +132,7 @@ int	ft_end_quoted(const char **s, int *quote)
 			++i;
 		}
 	}
-	
+	else
+		*quote = 0;
 	return (0);
 }
