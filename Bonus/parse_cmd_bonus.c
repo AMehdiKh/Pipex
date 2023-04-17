@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_cmd.c                                        :+:      :+:    :+:   */
+/*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/14 03:06:30 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 22:49:31 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "pipex_bonus.h"
 
 void	ft_cmds_parse(char *arg, t_pipex *pipex)
 {
@@ -20,7 +22,7 @@ void	ft_cmds_parse(char *arg, t_pipex *pipex)
 	}
 }
 
-void	ft_parse_path(t_pipex *pipex, char **env)
+void	ft_parse_path(t_pipex *pipex)
 {
 	int	i;
 

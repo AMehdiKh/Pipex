@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_dprintf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 16:47:09 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/03/17 18:06:12 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 11:13:12 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_dprintf.h"
 
-const char	*ft_check_spec(const char *format, t_printf *tab)
+const char	*ft_check_spec(const char *format, t_dprintf *tab)
 {
 	tab->spec = *format;
 	if (*format == '%')
@@ -37,9 +37,9 @@ const char	*ft_check_spec(const char *format, t_printf *tab)
 	return (format);
 }
 
-int	ft_printf(int fd, const char *format, ...)
+int	ft_dprintf(int fd, const char *format, ...)
 {
-	t_printf	tab[1];
+	t_dprintf	tab[1];
 
 	tab->fd = fd;
 	tab->len = 0;

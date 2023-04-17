@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/14 03:22:56 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 09:39:55 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_execve(t_pipex *pipex)
 	if (execve(pipex->cmd[0], pipex->cmd, pipex->env) < 0)
 	{
 		code = errno;
-		ft_printf(2, "pipex: %s: %s\n", pipex->cmd[0], strerror(errno));
+		ft_printf(2, "pipex: %s: %s\n", pipex->cmd[0], strerror(code));
 		ft_clear(pipex->cmd);
 		exit(EXIT_FAILURE);
 	}

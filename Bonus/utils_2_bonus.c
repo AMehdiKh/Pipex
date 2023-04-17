@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_2.c                                          :+:      :+:    :+:   */
+/*   utils_2_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/14 17:49:43 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 22:49:38 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "pipex_bonus.h"
 
 void	ft_dup2(int old, int new, t_pipex *pipex)
 {
@@ -33,7 +35,7 @@ void	ft_dup(int old, t_pipex *pipex)
 	{
 		code = errno;
 		ft_clean_parent(pipex);
-		ft_printf(STDERR_FILENO, "pipex: dup(): %s\n", strerror(errno));
+		ft_printf(STDERR_FILENO, "pipex: dup(): %s\n", strerror(code));
 		exit(EXIT_FAILURE);
 	}
 }

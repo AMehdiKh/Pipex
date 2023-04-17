@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/14 21:14:23 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 22:49:23 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "pipex_bonus.h"
 
 int	main(int ac, char **av, char **env)
 {
@@ -23,23 +23,24 @@ int	main(int ac, char **av, char **env)
 	pipex->prev_in = -1;
 	if (!ft_strncmp(av[1], "here_doc", 8))
 	{
-		pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
+		ft_here_doc(pipex);
 	}
 	else
 	{
-		pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
+		pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		pipex->file1 = ft_open(av[1], O_RDONLY, 0);
 	}
-	pipex(pipex);
+	ft_pipex(pipex);
 	ft_clean_parent(pipex);
 	return (0);
 }
 
-void	pipex(t_pipex *pipex)
+void	ft_pipex(t_pipex *pipex)
 {
 	int	i;
 
-	i = 1 + (!ft_strncmp(av[1], "here_doc", 8));
+	i = 1 + pipex->here_doc;
 	while (++i < (pipex->ac - 1))
 	{
 		ft_pipe(pipex);
@@ -56,10 +57,34 @@ void	pipex(t_pipex *pipex)
 			ft_check_cmd(pipex->av[i], pipex);
 			exit(127);
 		}
-		ft_dup(pipefd[0], pipex);
-		close(pipefd[0]);
-		close(pipefd[1]);
+		ft_dup(pipex->pipefd[0], pipex);
+		close(pipex->pipefd[0]);
+		close(pipex->pipefd[1]);
 		wait(NULL);
+	}
+}
+
+
+void	ft_here_doc(t_pipex *pipex)
+{
+	char	*here_doc;
+
+	ft_pipe(pipex);
+	while (1)
+	{
+		ft_printf(1, "> ");
+		here_doc = get_next_line(0);
+		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1) || !here_doc)
+		{
+			free(here_doc);
+			ft_dup(pipex->pipefd[0], pipex);
+			close(pipex->pipefd[0]);
+			close(pipex->pipefd[1]);
+			pipex->here_doc = 1;
+			break ;
+		}
+		ft_printf(pipex->pipefd[1], "%s", here_doc);
+		free(here_doc);
 	}
 }
 
@@ -80,7 +105,7 @@ void	ft_check_cmd(char *arg, t_pipex *pipex)
 		{
 			ft_clear(pipex->path);
 			free(pipex->cmd[0]);
-			pipex->cmd[0] = path;
+			pipex->cmd[0] = path_cmd;
 			ft_execve(pipex);
 		}
 		free(path_cmd);
@@ -88,36 +113,4 @@ void	ft_check_cmd(char *arg, t_pipex *pipex)
 	ft_clear(pipex->path);
 	ft_clear(pipex->cmd);
 	ft_cmd_not_exist(arg, pipex);
-}
-
-void	ft_here_doc()
-{
-	char	*buffer;
-	int		nbyte;
-
-	ft_pipe(pipefd);
-	buffer = malloc(4096);
-	if (!buffer)
-	{
-		;
-	}
-	while (1)
-	{
-		ft_printf(1, "> ");
-		buffer = get_next_line(0);
-		if (!buffer)
-		{
-			
-		}
-		if (ft_strncmp(ft_strtrim(buffer, '\n'), pipex->av[2], ft_strlen(pipex->av[2])))
-			ft_printf(pipex->pipefd[1], "%s", buffer);
-		else
-		{
-			free(buffer);
-			pipex->prev_in = ft_dup(pipefd[0]);
-			close(pipefd[0]);
-			close(pipefd[1]);
-		}
-		free(buffer);
-	}
 }

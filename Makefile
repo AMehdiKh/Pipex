@@ -1,28 +1,67 @@
+###############################################################################################################
 NAME = pipex
 
+BNAME = pipex_bonus
+###############################################################################################################
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -MMD
+###############################################################################################################
+MANDIR = Mandatory
 
-SRCS = main.c
+OBJDIR = Mandatory/objs
 
-OBJS = ${SRCS:.c=.o}
+FILES = main parse_cmd utils utils_2
 
-LIBFT = /Users/ael-khel/Desktop/Pipex/LibFT/libft.a
+SRCS = $(addsuffix .c,$(FILES))
 
+OBJS = ${SRCS:%.c=$(OBJDIR)/%.o}
+
+MANDEP = ${OBJS:.o=.d}
+##############################################################################################################
+BONDIR = Bonus
+
+BOBJDIR = Bonus/objs
+
+BFILES = main parse_cmd utils utils_2
+
+BSRCS = $(addsuffix _bonus.c,$(BFILES))
+
+BOBJS = ${BSRCS:%.c=$(BOBJDIR)/%.o}
+
+BONDEP = ${BOBJS:.o=.d}
+##############################################################################################################
+LIBFT = LibFT/libft.a
+##############################################################################################################
 .PHONY: clean
-all: $(NAME)
+man: $(NAME)
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(LIBFT) $(OBJS) -o $@
+	$(CC) $(OBJS) $(LIBFT) -o $@
+
+$(OBJDIR)/%.o: $(MANDIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+bonus: $(BNAME)
+$(BNAME): $(LIBFT) $(BOBJS)
+	$(CC) $(BOBJS) $(LIBFT) -o $@
+
+$(BOBJDIR)/%.o: $(BONDIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+all: man bonus
 
 $(LIBFT):
-	$(MAKE) -C ./LibFT
+	$(MAKE) -C LibFT
+
+sinclude $(MANDEP) $(BONDEP)
 
 clean:
-	$(MAKE) fclean -C ./LibFT
-	rm -f $(OBJS)
+	$(MAKE) fclean -C LibFT
+	$(RM) -r $(OBJDIR) $(BOBJDIR)
 
 fclean: clean
-	rm -f $(NAME)
+	$(RM) $(NAME) $(BNAME)
 
 re: fclean all

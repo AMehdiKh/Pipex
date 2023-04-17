@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_spec.c                                       :+:      :+:    :+:   */
+/*   ft_dprintf_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 02:40:56 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/03/17 17:58:31 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/16 11:22:43 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_dprintf.h"
 
-void	ft_putchar(char c, t_printf *tab)
+void	ft_putchar(char c, t_dprintf *tab)
 {
 	tab->len += write(tab->fd, &c, 1);
 }
 
-void	ft_putstr(char *s, t_printf *tab)
+void	ft_putstr(char *s, t_dprintf *tab)
 {
 	if (!s)
 		s = "(null)";
@@ -25,7 +25,7 @@ void	ft_putstr(char *s, t_printf *tab)
 		tab->len += write(tab->fd, s++, 1);
 }
 
-void	ft_putnbr(long n, t_printf *tab)
+void	ft_putnbr(long n, t_dprintf *tab)
 {
 	if (n < 0)
 	{
@@ -37,7 +37,7 @@ void	ft_putnbr(long n, t_printf *tab)
 	ft_putchar((n % 10) + 48, tab);
 }
 
-void	ft_puthex(unsigned long n, t_printf *tab)
+void	ft_puthex(unsigned long n, t_dprintf *tab)
 {
 	if (n >= 16)
 		ft_puthex(n / 16, tab);
