@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   mainghjghj.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 19:53:01 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/03 20:05:53 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:31:52 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	main(int ac, char **av, char **env)
 	pipex->file1 = open(av[1], O_RDONLY);
 	if (pipex->file1 < 0)
 	{
-		ft_printf(STDERR_FILENO, "pipex: %s: %s\n", av[1], strerror(errno));
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s\n", av[1], strerror(errno));
 	}
 	pipex->file2 = open(av[ac - 1], O_WRONLY | O_TRUNC);
 	if (pipex->file2 < 0)
 	{
-		ft_printf(STDERR_FILENO, "pipex: %s: %s\n", av[1], strerror(errno));
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s\n", av[1], strerror(errno));
 	}
 	ft_path(pipex, env);
 	int i = 2;
@@ -63,7 +63,7 @@ int	main(int ac, char **av, char **env)
 				full_cmd = ft_strjoin(ft_strjoin(pipex->valid_path, "/"), av[i]);
 				ft_cmds_parse(full_cmd, pipex);
 				free(full_cmd);
-				ft_printf(2, "%s\n", pipex->cmd[0]);
+				ft_dprintf(2, "%s\n", pipex->cmd[0]);
 				execve(pipex->cmd[0], pipex->cmd, pipex->env);
 			}
 		}
@@ -88,7 +88,7 @@ void	ft_path(t_pipex *pipex, char **env)
 			pipex->path = ft_split(&env[i][5], ':');
 			if (!pipex->path)
 			{
-				ft_printf(STDERR_FILENO,
+				ft_dprintf(STDERR_FILENO,
 					"pipex: ft_split(): %s\n", strerror(errno));
 				exit(EXIT_FAILURE);
 			}
@@ -103,7 +103,7 @@ void	ft_cmds_parse(char *cmd, t_pipex *pipex)
 	pipex->cmd = ft_split(cmd, ' ');
 	if (!pipex->cmd)
 	{
-		ft_printf(STDERR_FILENO, "pipex: ft_split(): %s\n", strerror(errno));
+		ft_dprintf(STDERR_FILENO, "pipex: ft_split(): %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 }
@@ -118,7 +118,7 @@ void	ft_cmd_name(char *cmd, t_pipex *pipex)
 	pipex->cmd_name = malloc(i + 1);
 	if (!pipex->cmd_name)
 	{
-		ft_printf(STDERR_FILENO, "pipex: malloc(): %s\n", strerror(errno));
+		ft_dprintf(STDERR_FILENO, "pipex: malloc(): %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	ft_strlcpy(pipex->cmd_name, cmd, (i + 1));
@@ -131,7 +131,7 @@ int	ft_dup2(int new, int old)
 	fd = dup2(new, old);
 	if (fd < 0)
 	{
-		ft_printf(STDERR_FILENO, "pipex: dup2(): %s\n", strerror(errno));
+		ft_dprintf(STDERR_FILENO, "pipex: dup2(): %s\n", strerror(errno));
 		// exit(EXIT_FAILURE);
 	}
 	close(new);

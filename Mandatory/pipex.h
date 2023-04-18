@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/16 09:49:51 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:31:19 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/wait.h>
-# include "./LibFT/libft.h"
-# include "./LibFT/get_next_line/get_next_line.h"
+# include "../LibFT/include/libft.h"
 
 # define STDERR 2
 

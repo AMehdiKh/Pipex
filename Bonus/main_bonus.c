@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/16 22:49:23 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:31:52 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_here_doc(t_pipex *pipex)
 	ft_pipe(pipex);
 	while (1)
 	{
-		ft_printf(1, "> ");
+		ft_dprintf(1, "> ");
 		here_doc = get_next_line(0);
 		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1) || !here_doc)
 		{
@@ -83,7 +83,7 @@ void	ft_here_doc(t_pipex *pipex)
 			pipex->here_doc = 1;
 			break ;
 		}
-		ft_printf(pipex->pipefd[1], "%s", here_doc);
+		ft_dprintf(pipex->pipefd[1], "%s", here_doc);
 		free(here_doc);
 	}
 }

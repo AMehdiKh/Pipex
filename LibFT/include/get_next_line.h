@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:29:42 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/16 23:03:57 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 02:43:19 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	ft_strlcpy_gnl(char *dst, const char *src, size_t size);
 
 void	*ft_free(char **ptr1);
 
-size_t	ft_strlen(const char *s);
+size_t	ft_strlen_gnl(const char *s);
 
 int		ft_strchr_gnl(char *s, int c);
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1337
+#  define BUFFER_SIZE 4096
 
 # endif
 #endif

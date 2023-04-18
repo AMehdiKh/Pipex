@@ -11,7 +11,8 @@ SRCS = \
 	ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c ft_atoi.c \
 	ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c \
 	ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
-	ft_putendl_fd.c ft_putnbr_fd.c ft_dprintf.c ft_dprintf_utils.c \
+	ft_putendl_fd.c ft_putnbr_fd.c \
+	ft_dprintf.c ft_dprintf_utils.c \
 	get_next_line.c get_next_line_utils.c
 
 OBJS = ${SRCS:.c=.o}
@@ -20,7 +21,7 @@ OBJS = ${SRCS:.c=.o}
 all: $(NAME)
 
 %.o: %.c include/libft.h
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -Iinclude -c $<
 
 $(NAME): $(OBJS)
 	$(AR) rcs $@ $?
