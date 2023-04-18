@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 02:35:34 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 11:56:02 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,16 @@ char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strtrim(char const *s1, char const *set);
 char		*ft_strjoin(char const *s1, char const *s2);
-char		**ft_split(char const *s, char c);
 char		*ft_strrchr(const char *s, int c);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup(const char *s);
 char		*ft_itoa(int n);
+
+char		**ft_split(char const *s, char c);
+char		**ft_alloc(char **ptr, const char *s, char c, size_t wc);
+size_t		word_count(const char *s, char c);
+int			ft_end_quoted(const char **s, int *quote);
+void		*ft_clear_split(char **ptr, size_t x);
 
 void		ft_striteri(char *s, void (*f)(unsigned int, char*));
 void		*ft_memmove(void *dst, const void *src, size_t n);

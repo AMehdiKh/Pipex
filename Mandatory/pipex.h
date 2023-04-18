@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 03:31:19 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 13:49:01 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@
 # include <sys/wait.h>
 # include "../LibFT/include/libft.h"
 
+# define STDIN 0
+# define STDOUT 1
 # define STDERR 2
+
+# define PERM_DENIED 126
+# define CMD_NOT_FOUND 127
 
 typedef struct s_pipex
 {
@@ -33,6 +38,7 @@ typedef struct s_pipex
 	char	*full_cmd;
 	char	**av;
 	char	**env;
+	int		exit_code;
 	int		ac;
 	int		pipefd[2];
 	int		prev_in;
@@ -41,7 +47,7 @@ typedef struct s_pipex
 	int		here_doc;
 }		t_pipex;
 
-void	ft_pipex(t_pipex *pipex);
+void	ft_pipex(t_pipex *pipex, int i);
 void	ft_here_doc(t_pipex *pipex);
 void	ft_check_cmd(char *arg, t_pipex *pipex);
 void	ft_cmds_parse(char *arg, t_pipex *pipex);

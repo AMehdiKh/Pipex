@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 03:31:52 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:35:46 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,5 @@ void	ft_cmd_not_exist(char *arg, t_pipex *pipex)
 	else
 		ft_dprintf(2, "pipex: %s: No such file or directory", pipex->cmd_name);
 	free(pipex->cmd_name);
+	exit(CMD_NOT_FOUND);
 }

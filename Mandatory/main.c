@@ -6,16 +6,20 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 03:31:52 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:33:45 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>
+#include <unistd.h>
 
 int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex[1];
 
+	if (ac < 5)
+		return (1);
 	ft_bzero(pipex, sizeof(pipex));
 	pipex->ac = ac;
 	pipex->av = av;
@@ -31,56 +35,88 @@ int	main(int ac, char **av, char **env)
 		pipex->file2 = ft_open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		pipex->file1 = ft_open(av[1], O_RDONLY, 0);
 	}
-	ft_pipex(pipex);
+	ft_pipex(pipex, (2 + pipex->here_doc));
 	ft_clean_parent(pipex);
-	return (0);
+	return (pipex->exit_code >> 8);
 }
 
-void	ft_pipex(t_pipex *pipex)
+void	ft_pipex(t_pipex *pipex, int i)
 {
-	int	i;
+	pid_t	pid;
 
-	i = 1 + pipex->here_doc;
-	while (++i < (pipex->ac - 1))
+	ft_pipe(pipex);
+	pid = ft_fork(pipex);
+	if (pid == 0)
 	{
-		ft_pipe(pipex);
-		if (ft_fork(pipex) == 0)
-		{
-			if (i == 2)
-				ft_dup2(pipex->file1, 0, pipex);
-			else
-				ft_dup2(pipex->prev_in, 0, pipex);
-			ft_dup2(pipex->pipefd[1], 1, pipex);
-			close(pipex->pipefd[0]);
-			if (i == pipex->ac - 2)
-				ft_dup2(pipex->file2, 1, pipex);
-			ft_check_cmd(pipex->av[i], pipex);
-			exit(127);
-		}
-		ft_dup(pipex->pipefd[0], pipex);
+		if (i == 2)
+			ft_dup2(pipex->file1, 0, pipex);
+		else
+			ft_dup2(pipex->prev_in, 0, pipex);
+		ft_dup2(pipex->pipefd[1], 1, pipex);
 		close(pipex->pipefd[0]);
-		close(pipex->pipefd[1]);
-		wait(NULL);
+		if (i == pipex->ac - 2)
+			ft_dup2(pipex->file2, 1, pipex);
+		ft_check_cmd(pipex->av[i], pipex);
 	}
+	if (i != 2)
+		close(pipex->prev_in);
+	ft_dup(pipex->pipefd[0], pipex);
+	close(pipex->pipefd[0]);
+	close(pipex->pipefd[1]);
+	if (i == (pipex->ac - 2))
+	{
+		waitpid(pid, &pipex->exit_code, 0);
+		while (wait(NULL) != -1)
+			;
+	}
+	else
+		ft_pipex(pipex, ++i);
 }
 
+// void	ft_pipex(t_pipex *pipex)
+// {
+// 	int	i;
+
+// 	i = 1 + pipex->here_doc;
+// 	while (++i < (pipex->ac - 1))
+// 	{
+// 		ft_pipe(pipex);
+// 		if (ft_fork(pipex) == 0)
+// 		{
+// 			if (i == 2)
+// 				ft_dup2(pipex->file1, 0, pipex);
+// 			else
+// 				ft_dup2(pipex->prev_in, 0, pipex);
+// 			ft_dup2(pipex->pipefd[1], 1, pipex);
+// 			close(pipex->pipefd[0]);
+// 			if (i == pipex->ac - 2)
+// 				ft_dup2(pipex->file2, 1, pipex);
+// 			ft_check_cmd(pipex->av[i], pipex);
+// 		}
+// 		ft_dup(pipex->pipefd[0], pipex);
+// 		close(pipex->pipefd[0]);
+// 		close(pipex->pipefd[1]);
+// 		wait(&pipex->exit_code);
+// 	}
+// }
 
 void	ft_here_doc(t_pipex *pipex)
 {
 	char	*here_doc;
 
+	pipex->here_doc = 1;
 	ft_pipe(pipex);
 	while (1)
 	{
-		ft_dprintf(1, "> ");
-		here_doc = get_next_line(0);
-		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1) || !here_doc)
+		ft_dprintf(STDOUT, "> ");
+		here_doc = get_next_line(STDIN);
+		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1)
+			|| !here_doc)
 		{
 			free(here_doc);
 			ft_dup(pipex->pipefd[0], pipex);
 			close(pipex->pipefd[0]);
 			close(pipex->pipefd[1]);
-			pipex->here_doc = 1;
 			break ;
 		}
 		ft_dprintf(pipex->pipefd[1], "%s", here_doc);

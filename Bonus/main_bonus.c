@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 03:31:52 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 12:12:50 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex[1];
 
+	if (ac < 5)
+		return (1);
 	ft_bzero(pipex, sizeof(pipex));
 	pipex->ac = ac;
 	pipex->av = av;
@@ -33,7 +35,7 @@ int	main(int ac, char **av, char **env)
 	}
 	ft_pipex(pipex);
 	ft_clean_parent(pipex);
-	return (0);
+	return (pipex->exit_code >> 8);
 }
 
 void	ft_pipex(t_pipex *pipex)
@@ -55,32 +57,31 @@ void	ft_pipex(t_pipex *pipex)
 			if (i == pipex->ac - 2)
 				ft_dup2(pipex->file2, 1, pipex);
 			ft_check_cmd(pipex->av[i], pipex);
-			exit(127);
 		}
 		ft_dup(pipex->pipefd[0], pipex);
 		close(pipex->pipefd[0]);
 		close(pipex->pipefd[1]);
-		wait(NULL);
+		wait(&pipex->exit_code);
 	}
 }
-
 
 void	ft_here_doc(t_pipex *pipex)
 {
 	char	*here_doc;
 
+	pipex->here_doc = 1;
 	ft_pipe(pipex);
 	while (1)
 	{
-		ft_dprintf(1, "> ");
-		here_doc = get_next_line(0);
-		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1) || !here_doc)
+		ft_dprintf(STDOUT, "> ");
+		here_doc = get_next_line(STDIN);
+		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1)
+			|| !here_doc)
 		{
 			free(here_doc);
 			ft_dup(pipex->pipefd[0], pipex);
 			close(pipex->pipefd[0]);
 			close(pipex->pipefd[1]);
-			pipex->here_doc = 1;
 			break ;
 		}
 		ft_dprintf(pipex->pipefd[1], "%s", here_doc);

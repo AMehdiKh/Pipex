@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 11:03:19 by Ael-khel          #+#    #+#             */
-/*   Updated: 2022/10/15 11:04:41 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 09:14:08 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (!n)
+	if (!n || !s1 || !s2)
 		return (0);
 	while (--n && *s1 == *s2 && *s1)
 	{
