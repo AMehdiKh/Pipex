@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 07:05:01 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 16:52:45 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:19:51 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@
 // }
 int	main(int argc, char **av, char **envp)
 {
-	char	*argv[] = {"/usr/bin/awk", "'{print}'", NULL};
-	if (execve(argv[0], argv, envp) < 0)
+	char	*argv[] = {"awk", "'{print}'", NULL};
+	if (execve("/usr/bin/awk", argv, envp) < 0)
 	{
 		int code = errno;
 		// perror("error");
 		printf("%d", code);
 	}
-	
 }
 // int	main(int argc, char **av, char **envp)
 // {

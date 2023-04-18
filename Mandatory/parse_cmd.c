@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 12:05:02 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 20:47:01 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	ft_parse_path(t_pipex *pipex)
 			{
 				ft_dprintf(2, "pipex: ft_split(): %s\n", strerror(errno));
 				free(pipex->cmd_name);
-				close(pipex->file1);
-				close(pipex->file2);
 				exit(EXIT_FAILURE);
 			}
 			break ;

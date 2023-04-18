@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 17:44:49 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:01:41 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	ft_open(const char *pathname, int flags, mode_t mode)
 	{
 		code = errno;
 		ft_dprintf(STDERR, "pipex: %s: %s\n", pathname, strerror(code));
-		// exit(1);
 	}
 	return (fd);
 }
@@ -35,7 +34,6 @@ void	ft_pipe(t_pipex *pipex)
 	if (pipe(pipex->pipefd) < 0)
 	{
 		code = errno;
-		ft_clean_parent(pipex);
 		ft_dprintf(STDERR, "pipex: pipe(): %s\n", strerror(code));
 		exit(EXIT_FAILURE);
 	}
@@ -50,7 +48,6 @@ pid_t	ft_fork(t_pipex *pipex)
 	if (pid < 0)
 	{
 		code = errno;
-		ft_clean_parent(pipex);
 		close(pipex->pipefd[0]);
 		close(pipex->pipefd[1]);
 		ft_dprintf(STDERR, "pipex: fork(): %s\n", strerror(code));
@@ -63,11 +60,12 @@ void	ft_execve(t_pipex *pipex)
 {
 	int	code;
 
-	if (execve(pipex->cmd[0], pipex->cmd, pipex->env) < 0)
+	if (execve(pipex->path_cmd, pipex->cmd, pipex->env) < 0)
 	{
 		code = errno;
 		ft_dprintf(STDERR, "pipex: %s: %s\n", pipex->cmd[0], strerror(code));
 		ft_clear(pipex->cmd);
+		free(pipex->path_cmd);
 		if (code == EACCES)
 			exit(PERM_DENIED);
 		exit(EXIT_FAILURE);
