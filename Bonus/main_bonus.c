@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/19 16:29:09 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:53:55 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,15 @@ void	ft_pipex(t_pipex *pipex, int i)
 		ft_check_cmd(pipex->av[i], pipex);
 	}
 	close(pipex->prev_in);
-	pipex->prev_in = dup(pipex->pipefd[0]); 
+	pipex->prev_in = dup(pipex->pipefd[0]);
 	close(pipex->pipefd[0]);
 	close(pipex->pipefd[1]);
-	if (i == (pipex->ac - 2))
-	{
-		waitpid(pid, &pipex->exit_code, 0);
-		while (wait(NULL) != -1)
-			;
-	}
-	else
+	if (i != (pipex->ac - 2))
 		ft_pipex(pipex, ++i);
+	// if (i == (pipex->ac - 2))
+		waitpid(pid, &pipex->exit_code, 0);
+	// else
+	// 	waitpid(pid, NULL, 0);
 }
 
 void	ft_here_doc(t_pipex *pipex)
