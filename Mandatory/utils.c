@@ -6,12 +6,11 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 21:01:41 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/19 12:31:48 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <stdlib.h>
 
 int	ft_open(const char *pathname, int flags, mode_t mode)
 {
@@ -60,6 +59,9 @@ void	ft_execve(t_pipex *pipex)
 {
 	int	code;
 
+	ft_clear(pipex->path);
+	if (!pipex->path_cmd)
+		pipex->path_cmd = ft_strdup(pipex->cmd[0]);
 	if (execve(pipex->path_cmd, pipex->cmd, pipex->env) < 0)
 	{
 		code = errno;

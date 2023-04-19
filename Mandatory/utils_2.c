@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 20:48:33 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:05:32 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_dup2(int old, int new)
 {
-	if (old > 0)
+	if (old >= 0)
 	{
 		dup2(old, new);
 		close(old);
