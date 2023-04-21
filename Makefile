@@ -11,7 +11,7 @@ MANDIR = Mandatory
 
 OBJDIR = Mandatory/objs
 
-FILES = main parse_cmd utils utils_2
+FILES = main parse_cmd utils_I utils_II
 
 SRCS = $(addsuffix .c,$(FILES))
 
@@ -23,7 +23,7 @@ BONDIR = Bonus
 
 BOBJDIR = Bonus/objs
 
-BFILES = main parse_cmd utils utils_2
+BFILES = main parse_cmd utils_I utils_II
 
 BSRCS = $(addsuffix _bonus.c,$(BFILES))
 

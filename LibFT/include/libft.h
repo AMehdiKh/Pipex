@@ -6,15 +6,13 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 11:56:02 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/20 22:55:12 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <unistd.h>
-# include <stdlib.h>
 # include "ft_dprintf.h"
 # include "get_next_line.h"
 
