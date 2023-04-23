@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_cmd.c                                        :+:      :+:    :+:   */
+/*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/19 14:57:35 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/23 11:23:51 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,27 @@ void	ft_slash_end(t_pipex *pipex)
 			pipex->path[i] = path;
 			++i;
 		}
+	}
+}
+
+void	ft_close_pipe(t_pipex *pipex, int i)
+{
+	if (i != 2)
+		close(pipex->prev_in);
+	pipex->prev_in = dup(pipex->pipefd[0]);
+	close(pipex->pipefd[0]);
+	close(pipex->pipefd[1]);
+}
+
+void	ft_clear(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	if (ptr)
+	{
+		while (ptr[i])
+			free(ptr[i++]);
+		free(ptr);
 	}
 }

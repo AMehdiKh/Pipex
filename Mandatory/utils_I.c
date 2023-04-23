@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_I.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/19 12:31:48 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/23 11:27:17 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_open(const char *pathname, int flags, mode_t mode)
 	{
 		code = errno;
 		ft_dprintf(STDERR, "pipex: %s: %s\n", pathname, strerror(code));
+		exit(EXIT_FAILURE);
 	}
 	return (fd);
 }
@@ -55,6 +56,12 @@ pid_t	ft_fork(t_pipex *pipex)
 	return (pid);
 }
 
+void	ft_dup2(int old, int new)
+{
+	dup2(old, new);
+	close(old);
+}
+
 void	ft_execve(t_pipex *pipex)
 {
 	int	code;
@@ -71,18 +78,5 @@ void	ft_execve(t_pipex *pipex)
 		if (code == EACCES)
 			exit(PERM_DENIED);
 		exit(EXIT_FAILURE);
-	}
-}
-
-void	ft_clear(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (ptr)
-	{
-		while (ptr[i])
-			free(ptr[i++]);
-		free(ptr);
 	}
 }

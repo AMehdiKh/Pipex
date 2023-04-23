@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 07:05:01 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/19 17:25:00 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/22 20:53:21 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 // {
 // 	int	i;
 
-// 	i = 1 + pipex->here_doc;
+// 	i = 1 + pipex->heredoc;
 // 	while (++i < (pipex->ac - 1))
 // 	{
 // 		ft_pipe(pipex);

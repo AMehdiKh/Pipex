@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 15:29:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/20 23:34:38 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/23 11:07:48 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 typedef struct s_pipex
 {
 	int		ac;
-	int		here_doc;
+	int		heredoc;
 	int		pipefd[2];
 	int		prev_in;
 	int		exit_code;
@@ -41,7 +41,7 @@ typedef struct s_pipex
 }		t_pipex;
 
 /* ############# - main_bonus.c - ############# */
-void	ft_here_doc(t_pipex *pipex);
+void	ft_heredoc(t_pipex *pipex);
 void	ft_pipex(t_pipex *pipex, int i);
 void	ft_check_cmd(char *arg, t_pipex *pipex);
 
@@ -58,6 +58,7 @@ void	ft_dup2(int old, int new);
 void	ft_execve(t_pipex *pipex);
 
 /* ############ - utils_II_bonus.c - ############ */
+int		ft_heredoc_cmp(t_pipex *pipex, char *heredoc);
 int		ft_file2(t_pipex *pipex);
 void	ft_close_pipe(t_pipex *pipex, int i);
 void	ft_clear(char **ptr);

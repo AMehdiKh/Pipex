@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/21 00:10:45 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/23 10:51:08 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,30 @@ int	main(int ac, char **av, char **env)
 	pipex->ac = ac;
 	pipex->av = av;
 	pipex->env = env;
-	if (!ft_strncmp(av[1], "here_doc", 8))
-		ft_here_doc(pipex);
-	ft_pipex(pipex, (2 + pipex->here_doc));
+	if (!ft_strncmp(av[1], "here_doc", ft_strlen("here_doc") + 1))
+		ft_heredoc(pipex);
+	ft_pipex(pipex, (2 + pipex->heredoc));
 	return (pipex->exit_code >> 8);
 }
 
-void	ft_here_doc(t_pipex *pipex)
+void	ft_heredoc(t_pipex *pipex)
 {
-	char	*here_doc;
+	char	*heredoc;
 
-	pipex->here_doc = 1;
+	pipex->heredoc = 1;
 	ft_pipe(pipex);
 	while (1)
 	{
 		ft_dprintf(STDOUT, "> ");
-		here_doc = get_next_line(STDIN);
-		if (!ft_strncmp(pipex->av[2], here_doc, ft_strlen(here_doc) - 1))
+		heredoc = get_next_line(STDIN);
+		if (ft_heredoc_cmp(pipex, heredoc))
 		{
-			free(here_doc);
+			free(heredoc);
 			ft_close_pipe(pipex, 2);
 			break ;
 		}
-		ft_dprintf(pipex->pipefd[1], "%s", here_doc);
-		free(here_doc);
+		ft_dprintf(pipex->pipefd[1], "%s", heredoc);
+		free(heredoc);
 	}
 }
 

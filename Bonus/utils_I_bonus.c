@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/20 23:33:39 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/22 19:08:10 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_open(const char *pathname, int flags, mode_t mode)
 	{
 		code = errno;
 		ft_dprintf(STDERR, "pipex: %s: %s\n", pathname, strerror(code));
+		exit(EXIT_FAILURE);
 	}
 	return (fd);
 }
