@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:04:00 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/23 10:51:08 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:39:07 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_heredoc(t_pipex *pipex)
 	}
 }
 
-void	ft_pipex(t_pipex *pipex, int i)
+void	ft_pipex(t_pipex *pipex, t_shell *shell, t_lexer *lexer)
 {
 	pid_t	pid;
 
@@ -57,23 +57,54 @@ void	ft_pipex(t_pipex *pipex, int i)
 	pid = ft_fork(pipex);
 	if (pid == 0)
 	{
-		if (i == 2)
-			ft_dup2(ft_open(pipex->av[1], O_RDONLY, 0), 0);
-		else
-			ft_dup2(pipex->prev_in, 0);
-		ft_dup2(pipex->pipefd[1], 1);
+		t_lexer *cmd;
+	
+		cmd = NULL;
 		close(pipex->pipefd[0]);
-		if (i == pipex->ac - 2)
-			ft_dup2(ft_file2(pipex), 1);
-		ft_check_cmd(pipex->av[i], pipex);
+		ft_dup2(pipex->prev_in, STDIN_FILENO);
+		ft_dup2(pipex->pipefd[1], STDOUT_FILENO);
+		lexer = ft_redi_parser(lexer);
+		if (!lexer)
+			exit(EXIT_SUCCESS);
+		if (lexer->type == CMD || lexer->type == BUILTIN)
+		{
+			cmd = lexer;
+			lexer += lexer->next;
+			lexer = ft_redi_parser(lexer);
+		}
+		if (cmd)
+			ft_check_cmd(cmd->word, pipex);
 	}
-	ft_close_pipe(pipex, i);
-	if (i != (pipex->ac - 2))
-		ft_pipex(pipex, (i + 1));
-	if (i == (pipex->ac - 2))
+	ft_close_pipe(pipex);
+	lexer = ft_grp_shift(lexer);
+	if (lexer)
+		ft_pipex(pipex, shell, lexer);
+	if (!lexer)
 		waitpid(pid, &pipex->exit_code, 0);
 	else
 		waitpid(pid, NULL, 0);
+}
+
+t_lexer	*ft_redi_parser(t_lexer *lexer)
+{
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE || lexer->type == W_T_FILE))
+	{
+		if (lexer->type == R_FILE)
+			ft_dup2(ft_open(lexer->word, O_RDONLY, 0), STDIN_FILENO);
+		else if (lexer->type == W_A_FILE || lexer->type == W_T_FILE)
+			ft_dup2(ft_file2(lexer), STDOUT_FILENO);
+		lexer += lexer->next;
+	}
+	return (lexer);
+}
+t_lexer	*ft_grp_shift(t_lexer *lexer)
+{
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE 
+		|| lexer->type == W_T_FILE || lexer->type == CMD || lexer->type == BUILTIN))
+		lexer += lexer->next;
+	if (lexer && lexer->type == PIPE)
+		lexer += lexer->next;
+	return (lexer);
 }
 
 void	ft_check_cmd(char *arg, t_pipex *pipex)
