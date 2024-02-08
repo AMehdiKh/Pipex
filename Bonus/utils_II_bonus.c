@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/29 23:14:32 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/23 10:51:15 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,24 @@ int	ft_heredoc_cmp(t_pipex *pipex, char *heredoc)
 	return (1);
 }
 
-int	ft_file2(t_lexer *lexer)
+int	ft_file2(t_pipex *pipex)
 {
 	int		fd;
+	int		ac;
+	char	**av;
 
-	if (lexer->node->type == W_A_FILE)
-		fd = ft_open(lexer->node->word, O_CREAT | O_APPEND | O_WRONLY, 0644);
-	if (lexer->node->type == W_T_FILE)
-		fd = ft_open(lexer->node->word, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	ac = pipex->ac;
+	av = pipex->av;
+	if (pipex->heredoc)
+		fd = ft_open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
+	else
+		fd = ft_open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	return (fd);
 }
 
-void	ft_close_pipe(t_pipex *pipex)
+void	ft_close_pipe(t_pipex *pipex, int i)
 {
-	if (pipex->prev_in)
+	if (i != 2)
 		close(pipex->prev_in);
 	pipex->prev_in = dup(pipex->pipefd[0]);
 	close(pipex->pipefd[0]);

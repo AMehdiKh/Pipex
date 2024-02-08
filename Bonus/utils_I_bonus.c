@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/29 22:16:04 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/04/22 19:08:10 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ pid_t	ft_fork(t_pipex *pipex)
 
 void	ft_dup2(int old, int new)
 {
-	if (old == new)
-		return ;
 	dup2(old, new);
 	close(old);
 }
